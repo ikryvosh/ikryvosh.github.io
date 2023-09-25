@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список справ</title>
+    <style>
+      /* Код стилів з вашого коду 2 */
+    </style>
+</head>
+<body>
+    <h1>Список справ</h1>
+    <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="Додати справу">
+        <button type="submit">Додати</button>
+    </form>
+    <ul id="todo-list"></ul>
+    <p>Загальна кількість справ: <span id="item-count">0</span></p>
+    <p>Кількість незроблених справ: <span id="unchecked-count">0</span></p>
+    <script>
+        const classNames = {
+            TODO_ITEM: 'todo-container',
+            TODO_CHECKBOX: 'todo-checkbox',
+            TODO_TEXT: 'todo-text',
+            TODO_DELETE: 'todo-delete',
+        }
+
+        const list = document.getElementById('todo-list');
+        let itemCountSpan = document.getElementById('item-count');
+        let uncheckedCountSpan = document.getElementById('unchecked-count');
+        let totalTasks = 0;
+        let incompleteTasks = 0;
+
+        function addTask(taskText) {
+            const listItem = document.createElement("li");
+            listItem.innerText = taskText;
+
+            const completeButton = document.createElement("button");
+            completeButton.innerText = "Виконано";
+            completeButton.addEventListener("click", completeTask);
+
+            listItem.appendChild(completeButton);
+            todoList.appendChild(listItem);
+
+            totalTasks++;
+            incompleteTasks++;
+            updateTaskCount();
+            saveTasks();
+        }
+
+        function completeTask() {
+            const listItem = this.parentNode;
+            listItem.style.textDecoration = "line-through";
+            incompleteTasks--;
+            updateTaskCount();
+            saveTasks();
+        }
+
+        function updateTaskCount() {
+            itemCountSpan.textContent = totalTasks;
+            uncheckedCountSpan.textContent = incompleteTasks;
+        }
+
+        function saveTasks() {
+            const tasks = [];
+            const taskItems = document.querySelectorAll("#todo-list li");
+            taskItems.forEach(function (item) {
+                tasks.push(item.innerText);
+            });
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const storedTasks = localStorage.getItem("tasks");
+            if (storedTasks) {
+                const tasks = JSON.parse(storedTasks);
+                tasks.forEach(function (taskText) {
+                    addTask(taskText);
+                });
+            }
+        });
+
+        const todoForm = document.getElementById("todo-form");
+        const todoInput = document.getElementById("todo-input");
+        const todoList = document.getElementById("todo-list");
+
+        todoForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const taskText = todoInput.value.trim();
+            if (taskText !== "") {
+                addTask(taskText);
+                todoInput.value = "";
+            }
+        });
+    </script>
+</body>
+</html>
