@@ -83,79 +83,105 @@ ul {
     <p>Кількість незроблених справ: <span id="unchecked-count">0</span></p>
     <script>
         const classNames = {
-            TODO_ITEM: 'todo-container',
-            TODO_CHECKBOX: 'todo-checkbox',
-            TODO_TEXT: 'todo-text',
-            TODO_DELETE: 'todo-delete',
-        }
+  TODO_ITEM: 'todo-container',
+  TODO_CHECKBOX: 'todo-checkbox',
+  TODO_TEXT: 'todo-text',
+  TODO_DELETE: 'todo-delete',
+}
 
-        const list = document.getElementById('todo-list');
-        let itemCountSpan = document.getElementById('item-count');
-        let uncheckedCountSpan = document.getElementById('unchecked-count');
-        let totalTasks = 0;
-        let incompleteTasks = 0;
+const list = document.getElementById('todo-list');
 
-        function addTask(taskText) {
-            const listItem = document.createElement("li");
-            listItem.innerText = taskText;
+function newTodo() {
+  alert('New TODO button clicked!')
+}
 
-            const completeButton = document.createElement("button");
-            completeButton.innerText = "Виконано";
-            completeButton.addEventListener("click", completeTask);
+// Функція для додавання справи
+function addTask(taskText) {
+    // Створити новий елемент списку
+    const listItem = document.createElement("li");
+    listItem.innerText = taskText;
 
-            listItem.appendChild(completeButton);
-            todoList.appendChild(listItem);
+    // Додати кнопку для відмітки справи як виконаної
+    const completeButton = document.createElement("button");
+    completeButton.innerText = "Виконано";
+    completeButton.addEventListener("click", completeTask);
 
-            totalTasks++;
-            incompleteTasks++;
-            updateTaskCount();
-            saveTasks();
-        }
+    // Додати справу та кнопку до списку
+    listItem.appendChild(completeButton);
+    todoList.appendChild(listItem);
 
-        function completeTask() {
-            const listItem = this.parentNode;
-            listItem.style.textDecoration = "line-through";
-            incompleteTasks--;
-            updateTaskCount();
-            saveTasks();
-        }
+    // Збільшити загальну кількість справ та кількість незроблених справ
+    totalTasks++;
+    incompleteTasks++;
+    updateTaskCount();
 
-        function updateTaskCount() {
-            itemCountSpan.textContent = totalTasks;
-            uncheckedCountSpan.textContent = incompleteTasks;
-        }
+    // Зберегти дані в Local Storage
+    saveTasks();
+}
 
-        function saveTasks() {
-            const tasks = [];
-            const taskItems = document.querySelectorAll("#todo-list li");
-            taskItems.forEach(function (item) {
-                tasks.push(item.innerText);
-            });
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-        }
+// Функція для відмітки справи як виконаної
+function completeTask() {
+    // Отримати батьківський елемент (список) і зменшити кількість незроблених справ
+    const listItem = this.parentNode;
+    listItem.style.textDecoration = "line-through";
+    incompleteTasks--;
+    updateTaskCount();
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const storedTasks = localStorage.getItem("tasks");
-            if (storedTasks) {
-                const tasks = JSON.parse(storedTasks);
-                tasks.forEach(function (taskText) {
-                    addTask(taskText);
-                });
-            }
+    // Зберегти дані в Local Storage
+    saveTasks();
+}
+
+// Функція для оновлення статистики
+function updateTaskCount() {
+    itemCountSpan.textContent = totalTasks;
+    uncheckedCountSpan.textContent = incompleteTasks;
+}
+
+// Функція для збереження справ в Local Storage
+function saveTasks() {
+    const tasks = [];
+    const taskItems = document.querySelectorAll("#todo-list li");
+    taskItems.forEach(function (item) {
+        tasks.push(item.innerText);
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Функція для завантаження справ з Local Storage
+function loadTasks() {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+        const tasks = JSON.parse(storedTasks);
+        tasks.forEach(function (taskText) {
+            addTask(taskText);
         });
+    }
+}
 
-        const todoForm = document.getElementById("todo-form");
-        const todoInput = document.getElementById("todo-input");
-        const todoList = document.getElementById("todo-list");
+// Отримати елементи DOM
+const todoForm = document.getElementById("todo-form");
+const todoInput = document.getElementById("todo-input");
+const itemCountSpan = document.getElementById("item-count");
+const uncheckedCountSpan = document.getElementById("unchecked-count");
 
-        todoForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            const taskText = todoInput.value.trim();
-            if (taskText !== "") {
-                addTask(taskText);
-                todoInput.value = "";
-            }
-        });
-    </script>
+// Змінні для відстеження кількості справ
+let totalTasks = 0;
+let incompleteTasks = 0;
+
+// Перевірка, чи є дані в Local Storage при завантаженні сторінки
+document.addEventListener("DOMContentLoaded", function () {
+    loadTasks(); // Викликайте функцію завантаження при завантаженні сторінки
+});
+
+// Додати обробник подій для форми
+todoForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const taskText = todoInput.value.trim();
+    if (taskText !== "") {
+        addTask(taskText);
+        todoInput.value = "";
+    }
+});
+</script>
 </body>
 </html>
