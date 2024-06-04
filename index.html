@@ -1,32 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Inventory</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Inventory</title>
 </head>
 <body>
-    <h1>Car Inventory</h1>
-    <form>
-        <label for="name">Name:</label>
-        <input type="text" id="name" required><br>
+  <h1>Car Inventory</h1>
+  <form>
+    <label for="name">Name:</label>
+    <input type="text" id="name" required><br>
 
-        <label for="make">Make:</label>
-        <input type="text" id="make" required><br>
+    <label for="make">Make:</label>
+    <input type="text" id="make" required><br>
 
-        <label for="model">Model:</label>
-        <input type="text" id="model" required><br>
+    <label for="model">Model:</label>
+    <input type="text" id="model" required><br>
 
-        <label for="year">Year:</label>
-        <input type="number" id="year" required><br>
+    <label for="year">Year:</label>
+    <input type="number" id="year" required><br>
 
-        <label for="price">Price:</label>
-        <input type="number" id="price" required><br>
+    <label for="price">Price:</label>
+    <input type="number" id="price" required><br>
 
-        <button type="button" onclick="addCar()">Add Car</button>
-    </form>
+    <button type="button" onclick="addCar()">Add Car</button>
+  </form>
 
-    <ul id="car-list"></ul>
+  <ul id="car-list"></ul>
+
+  <script>
+    function addCar() {
+      const name = document.getElementById('name').value;
+      const make = document.getElementById('make').value;
+      const model = document.getElementById('model').value;
+      const year = document.getElementById('year').value;
+      const price = document.getElementById('price').value;
+
+      const carListItem = document.createElement('li');
+      carListItem.textContent = `${name} - ${make} ${model} (${year}) - $${price}`;
+
+      const carList = document.getElementById('car-list');
+      carList.appendChild(carListItem);
+    }
+  </script>
 
 </body>
 </html>
