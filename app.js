@@ -19,8 +19,7 @@ function addCar() {
     const model = document.getElementById('model').value;
     const year = document.getElementById('year').value;
     const price = document.getElementById('price').value;
-    const phone = document.getElementById('phone').value;
-
+  
     if (name && make && model && year && price && phone) {
         cars.push({ name, make, model, year: parseInt(year), price: parseFloat(price), phone });
         renderCarList();
@@ -29,7 +28,6 @@ function addCar() {
         document.getElementById('model').value = '';
         document.getElementById('year').value = '';
         document.getElementById('price').value = '';
-        document.getElementById('phone').value = ''; 
     } else {
         alert('Please fill out all fields');
     }
