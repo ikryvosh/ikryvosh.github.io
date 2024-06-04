@@ -21,8 +21,8 @@ function addCar() {
     const price = document.getElementById('price').value;
     const phone = document.getElementById('phone').value;
 
-    console.log(name, make, model, year, price, phone);
-    
+    console.log(name, make, model, year, price, phone); // Для відладки
+
     if (name && make && model && year && price && phone) {
         cars.push({ name, make, model, year: parseInt(year), price: parseFloat(price), phone });
         renderCarList();
