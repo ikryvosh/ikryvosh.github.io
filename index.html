@@ -41,6 +41,18 @@
 
       const carList = document.getElementById('car-list');
       carList.appendChild(carListItem);
+
+     
+      const removeButton = document.createElement('button');
+      removeButton.textContent = 'Remove';
+      removeButton.onclick = function() {
+        removeCar(carListItem);
+      };
+      carListItem.appendChild(removeButton);
+    }
+
+    function removeCar(carListItem) {
+      carListItem.parentNode.removeChild(carListItem);
     }
   </script>
 
