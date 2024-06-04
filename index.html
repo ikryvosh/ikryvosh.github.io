@@ -33,5 +33,13 @@
     <ul id="car-list"></ul>
 
     <script src="app.js"></script>
+    <script>
+        // Перевірка, що скрипт завантажено і функція існує
+        if (typeof addCar === 'undefined') {
+            console.error('Функція addCar не визначена. Перевірте підключення app.js');
+        } else {
+            console.log('Функція addCar успішно завантажена');
+        }
+    </script>
 </body>
 </html>
