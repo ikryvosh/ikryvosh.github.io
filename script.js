@@ -1,105 +1,59 @@
-const classNames = {
-  TODO_ITEM: 'todo-container',
-  TODO_CHECKBOX: 'todo-checkbox',
-  TODO_TEXT: 'todo-text',
-  TODO_DELETE: 'todo-delete',
-};
+let cars = [];
 
-const list = document.getElementById('todo-list');
-const itemCountSpan = document.getElementById('item-count');
-const uncheckedCountSpan = document.getElementById('unchecked-count');
-
-let totalItemCount = 0;
-let uncheckedItemCount = 0;
-let todoList = [];
-
-// Функція для оновлення відображення кількості справ
-function updateCounts() {
-  itemCountSpan.textContent = totalItemCount;
-  uncheckedCountSpan.textContent = uncheckedItemCount;
-}
-
-// Функція для додавання справи
-function newTodo() {
-  const todoText = prompt('Введіть текст справи:');
-  if (todoText) {
-    const todoItem = {
-      id: Date.now(),
-      text: todoText,
-      checked: false,
-    };
-    todoList.push(todoItem);
-    saveTodoListToLocalStorage();
-    renderTodoList();
-  }
-}
-
-// Функція для оновлення відображення списку справ
-function renderTodoList() {
-  list.innerHTML = '';
-  totalItemCount = 0;
-  uncheckedItemCount = 0;
-
-  todoList.forEach((todoItem) => {
-    const todoItemElement = document.createElement('li');
-    todoItemElement.classList.add(classNames.TODO_ITEM);
-
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.classList.add(classNames.TODO_CHECKBOX);
-    checkbox.checked = todoItem.checked;
-
-    checkbox.addEventListener('change', function () {
-      todoItem.checked = checkbox.checked;
-      saveTodoListToLocalStorage();
-      updateCounts();
-    });
-
-    const todoTextElement = document.createElement('span');
-    todoTextElement.textContent = todoItem.text;
-    todoTextElement.classList.add(classNames.TODO_TEXT);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Видалити';
-    deleteButton.classList.add(classNames.TODO_DELETE);
-
-    deleteButton.addEventListener('click', function () {
-      const index = todoList.findIndex((item) => item.id === todoItem.id);
-      if (index !== -1) {
-        todoList.splice(index, 1);
-        saveTodoListToLocalStorage();
-        renderTodoList();
-      }
-    });
-
-    todoItemElement.appendChild(checkbox);
-    todoItemElement.appendChild(todoTextElement);
-    todoItemElement.appendChild(deleteButton);
-
-    list.appendChild(todoItemElement);
-
-    totalItemCount++;
-    if (!todoItem.checked) {
-      uncheckedItemCount++;
-    }
+function renderCarList() {
+  const carList = document.getElementById('car-list');
+  carList.innerHTML = '';
+  cars.forEach((car, index) => {
+    const carItem = document.createElement('li');
+    carItem.innerHTML = `
+      ${car.name} - ${car.make} ${car.model} (${car.year}) - $${car.price}
+      <button onclick="removeCar(${index})">Remove</button>
+    `;
+    carList.appendChild(carItem);
   });
-
-  updateCounts();
 }
 
-// Функція для збереження списку справ у Local Storage
-function saveTodoListToLocalStorage() {
-  localStorage.setItem('todoList', JSON.stringify(todoList));
-}
+function addCar() {
+  const name = document.getElementById('name').value;
+  const make = document.getElementById('make').value;
+  const model = document.getElementById('model').value;
+  const year = document.getElementById('year').value;
+  const price = document.getElementById('price').value;
 
-// Функція для завантаження списку справ з Local Storage при завантаженні сторінки
-function loadTodoListFromLocalStorage() {
-  const storedTodoList = localStorage.getItem('todoList');
-  if (storedTodoList) {
-    todoList = JSON.parse(storedTodoList);
-    renderTodoList();
+  if (name && make && model && year && price) {
+    cars.push({ name, make, model, year: parseInt(year), price: parseFloat(price) });
+    renderCarList();
+    document.getElementById('name').value = '';
+    document.getElementById('make').value = '';
+    document.getElementById('model').value = '';
+    document.getElementById('year').value = '';
+    document.getElementById('price').value = '';
+  } else {
+    alert('Please fill out all fields');
   }
 }
 
-// Викликаємо функцію для завантаження списку справ з Local Storage
-loadTodoListFromLocalStorage();
+function removeCar(index) {
+  cars.splice(index, 1);
+  renderCarList();
+}
+
+function searchCars() {
+  const query = document.getElementById('search').value.toLowerCase();
+  const filteredCars = cars.filter(car => 
+    car.name.toLowerCase().includes(query) ||
+    car.make.toLowerCase().includes(query) ||
+    car.model.toLowerCase().includes(query)
+  );
+
+  const carList = document.getElementById('car-list');
+  carList.innerHTML = '';
+  filteredCars.forEach((car, index) => {
+    const carItem = document.createElement('li');
+    carItem.innerHTML = `
+      ${car.name} - ${car.make} ${car.model} (${car.year}) - $${car.price}
+      <button onclick="removeCar(${index})">Remove</button>
+    `;
+    carList.appendChild(carItem);
+  });
+}
